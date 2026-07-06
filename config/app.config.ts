@@ -51,7 +51,7 @@ export const appConfig = {
   // AI Model Configuration
   ai: {
     // Default AI model
-    defaultModel: 'google/gemini-3-pro-preview',
+    defaultModel: process.env.DEFAULT_MODEL || 'google/gemini-3-pro-preview',
     
     // Available models
     availableModels: [
