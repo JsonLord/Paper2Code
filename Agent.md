@@ -14,8 +14,8 @@ This codebase is configured for deployment on Hugging Face Spaces.
 - **SDK:** docker
 
 ## Mandatory Endpoints
-- /api/health: Returns HTTP 200 when ready.
-- /api/api-docs: Documentation of all API endpoints.
+- /health: Returns HTTP 200 when ready.
+- /api-docs: Documentation of all API endpoints.
 
 ## HF Space Secrets
 To fully configure the application, the following secrets should be set in the Hugging Face Space settings:

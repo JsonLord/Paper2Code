@@ -4,13 +4,13 @@ export async function GET() {
   const docs = {
     endpoints: [
       {
-        path: "/api/health",
+        path: "/health",
         method: "GET",
         purpose: "Health check endpoint",
         response: { status: "ok" }
       },
       {
-        path: "/api/api-docs",
+        path: "/api-docs",
         method: "GET",
         purpose: "API Documentation",
         response: { endpoints: "[]" }
