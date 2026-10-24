@@ -2,7 +2,7 @@
 
 Status: **Implementation-ready specification; not an implementation or deployment**
 Target repository: https://github.com/JsonLord/Paper2Code
-Baseline: \`website2code\` at \`0d77173026b2f61634e380004c83164244d20c1c\` (recheck HEAD before coding)
+Baseline: `website2code` at `0d77173026b2f61634e380004c83164244d20c1c` (recheck HEAD before coding)
 Desired outcome: a third top-level tab named **Dashboard2Code** beside **Website2Code** and **Paper2Code**.
 
 ## 1. Purpose and interpretation
@@ -13,14 +13,14 @@ A screenshot is *visual evidence only*: it cannot establish real business rules,
 
 ## 2. Existing codebase facts to preserve
 
-- \`app/page.tsx\` currently renders two mode buttons and maintains \`'website' | 'paper'\` state; **add** a third \`'dashboard'\` mode without regressing the other two.
-- The website flow transfers input via \`sessionStorage\` and navigates to \`app/generation/page.tsx\`, which creates a sandbox and uses the existing generation/apply/edit/preview workflow. Prefer a typed, namespaced Dashboard2Code handoff to this pipeline rather than a second builder.
-- \`app/api/scrape-website/route.ts\` is a Firecrawl adapter but currently returns synthetic sample content when no key is present; Dashboard2Code must never report this as a successfully inspected source.
-- \`lib/github.ts\` includes a forceful branch update. Dashboard2Code must not use that unsafe behavior for source ingestion or default export.
-- \`app/api/submit-job/route.ts\` handles paper submission and GitHub export: keep it separate.
+- `app/page.tsx` currently renders two mode buttons and maintains `'website' | 'paper'` state; **add** a third `'dashboard'` mode without regressing the other two.
+- The website flow transfers input via `sessionStorage` and navigates to `app/generation/page.tsx`, which creates a sandbox and uses the existing generation/apply/edit/preview workflow. Prefer a typed, namespaced Dashboard2Code handoff to this pipeline rather than a second builder.
+- `app/api/scrape-website/route.ts` is a Firecrawl adapter but currently returns synthetic sample content when no key is present; Dashboard2Code must never report this as a successfully inspected source.
+- `lib/github.ts` includes a forceful branch update. Dashboard2Code must not use that unsafe behavior for source ingestion or default export.
+- `app/api/submit-job/route.ts` handles paper submission and GitHub export: keep it separate.
 - Next.js 15 / React 19 / TypeScript / Tailwind app, Vite-based generated-app sandbox, existing provider routing, ZIP export and code editor affordances should be reused when practical.
-- \`jules/AGENTS.md\` contains stale references to an unrelated project. Follow relevant repository source and the actual root \`Agent.md\`; do not treat those stale statements as the project's architecture or deployment authorization.
-- \`.github/workflows/sync-to-hf.yml\` targets other branches, but direct deployment remains out of scope.
+- `jules/AGENTS.md` contains stale references to an unrelated project. Follow relevant repository source and the actual root `Agent.md`; do not treat those stale statements as the project's architecture or deployment authorization.
+- `.github/workflows/sync-to-hf.yml` targets other branches, but direct deployment remains out of scope.
 
 Start from this structure, inspect actual source before choosing implementation boundaries, and retain existing working behavior.
 
@@ -44,7 +44,7 @@ The inspection review shows source URL/ref, thumbnail/reference if permitted, la
 
 ### 3.2 Generation workspace
 
-Reuse \`/generation\` as much as possible:
+Reuse `/generation` as much as possible:
 
 - Side-by-side reference preview (image or public-page snapshot where available), generated live sandbox, editable code and chat/instruction area.
 - Visible states: validating, retrieving, inspecting, awaiting review, generating, installing/building, preview ready, error/cancelled.
@@ -65,7 +65,7 @@ If a public webpage cannot be captured or an image format is unsupported, show a
 
 ### GitHub repository
 
-Recognize \`https://github.com/{owner}/{repo}\`, optional \`/tree/{ref}/{path}\` and \`/blob/{ref}/{path}\`, including ref names containing slashes (resolve ambiguity through GitHub API metadata, not naive string slicing). Resolve the exact immutable commit SHA and selected path. Use GitHub's public read-only REST content/tree endpoints. Inspect bounded directory listings, likely dashboard files (README, package manifests, app routes, UI components, CSS, tokens), images and license. Do **not** automatically clone and execute the repository, run lifecycle scripts, install dependencies, evaluate fetched code, follow submodules, or import executable source into the server. Treat fetched code as *untrusted reference material*.
+Recognize `https://github.com/{owner}/{repo}`, optional `/tree/{ref}/{path}` and `/blob/{ref}/{path}`, including ref names containing slashes (resolve ambiguity through GitHub API metadata, not naive string slicing). Resolve the exact immutable commit SHA and selected path. Use GitHub's public read-only REST content/tree endpoints. Inspect bounded directory listings, likely dashboard files (README, package manifests, app routes, UI components, CSS, tokens), images and license. Do **not** automatically clone and execute the repository, run lifecycle scripts, install dependencies, evaluate fetched code, follow submodules, or import executable source into the server. Treat fetched code as *untrusted reference material*.
 
 Detect multi-dashboard repos and ask which subdirectory/page to reproduce. Preserve attribution/license metadata. Prefer code-derived structure when legitimately reusable; otherwise derive visual/semantic structure without copying protected assets verbatim. Unsupported or restricted licenses require explicit notice and original replacement assets.
 
@@ -89,11 +89,11 @@ Use an existing configured capture/scrape provider (e.g. Firecrawl) with screens
 
 Prefer small typed modules, not one enormous page component. Suggested locations are illustrative; match the repo's actual conventions:
 
-- \`types/dashboard.ts\`: \`DashboardSource\`, \`DashboardInspection\`, \`DashboardBlueprint\`, \`DashboardGenerationContext\` and discriminated status/error types.
-- \`lib/dashboard/source-classifier.ts\`, \`github-inspector.ts\`, \`asset-inspector.ts\`, \`page-inspector.ts\`, \`blueprint.ts\`, \`security.ts\`: source adapters and pure validation.
-- \`app/api/dashboard/inspect/route.ts\`: typed POST adapter for read-only inspection.
-- \`components/dashboard/\`: dedicated home input, blueprint review and comparison affordances.
-- Update \`app/page.tsx\` for third tab; extend \`app/generation/page.tsx\` with a dashboard-specific initialization context while retaining existing website/paper contract.
+- `types/dashboard.ts`: `DashboardSource`, `DashboardInspection`, `DashboardBlueprint`, `DashboardGenerationContext` and discriminated status/error types.
+- `lib/dashboard/source-classifier.ts`, `github-inspector.ts`, `asset-inspector.ts`, `page-inspector.ts`, `blueprint.ts`, `security.ts`: source adapters and pure validation.
+- `app/api/dashboard/inspect/route.ts`: typed POST adapter for read-only inspection.
+- `components/dashboard/`: dedicated home input, blueprint review and comparison affordances.
+- Update `app/page.tsx` for third tab; extend `app/generation/page.tsx` with a dashboard-specific initialization context while retaining existing website/paper contract.
 
 Suggested inspect request:
 
@@ -120,12 +120,12 @@ Suggested inspect response:
       "warnings": ["No production data access inferred"]
     }
 
-The schema must be validated with Zod, versioned (e.g. \`schemaVersion: 1\`), and backed by provenance references: screenshot coordinates or source file+commit+path, not unsupported claims. The API must return structured error codes and a visible failure, not HTTP 200 with a fake dashboard. For screenshot/asset evidence, use short-lived bounded storage or explicit client handoff without embedding large data URLs into \`sessionStorage\`. Do not assume long-lived server memory or a new database in a Hugging Face Space.
+The schema must be validated with Zod, versioned (e.g. `schemaVersion: 1`), and backed by provenance references: screenshot coordinates or source file+commit+path, not unsupported claims. The API must return structured error codes and a visible failure, not HTTP 200 with a fake dashboard. For screenshot/asset evidence, use short-lived bounded storage or explicit client handoff without embedding large data URLs into `sessionStorage`. Do not assume long-lived server memory or a new database in a Hugging Face Space.
 
 Generation pipeline:
 
 1. Validate/classify URL and fetch bounded evidence.
-2. Extract \`DashboardBlueprint\` from source evidence; note uncertainties and licensing.
+2. Extract `DashboardBlueprint` from source evidence; note uncertainties and licensing.
 3. Ask for entry point / human correction if ambiguous.
 4. Generate multi-file React/Vite source using the existing model provider and sandbox pipeline, with stable reusable components and editable local state.
 5. Apply code to isolated sandbox; run package/build/runtime checks without executing original source-repo code.
@@ -145,13 +145,13 @@ Generated frontend defaults to React + TypeScript + Vite + compatible CSS/Tailwi
 - Deterministic fixture data and no undisclosed external API dependencies.
 - Reasonable empty/error/loading states and documented assumptions.
 - No exposed API keys, untrusted scripts, remote code evaluation or silent publishing.
-- A \`README\` in the generated result describing source attribution, setup, limitations, data-mode status and known mismatches.
+- A `README` in the generated result describing source attribution, setup, limitations, data-mode status and known mismatches.
 
 For fidelity evaluation, keep the reference viewport fixed, record dimensions, and use a reproducible screenshot comparison and reviewer checklist. A numerical image-similarity score may be reported only if implemented and labeled with method; never invent a score or claim pixel-perfect equivalence.
 
 ## 7. API/error/security behavior
 
-Required structured errors: \`INVALID_URL\`, \`UNSUPPORTED_SOURCE\`, \`PRIVATE_OR_BLOCKED_ADDRESS\`, \`SOURCE_UNAVAILABLE\`, \`SOURCE_TOO_LARGE\`, \`RATE_LIMITED\`, \`CAPTURE_UNAVAILABLE\`, \`AMBIGUOUS_ENTRYPOINT\`, \`INSPECTION_FAILED\`, \`GENERATION_FAILED\`, \`SANDBOX_FAILED\`. Preserve HTTP semantics (400/403/404/413/429/422/502/503 as appropriate).
+Required structured errors: `INVALID_URL`, `UNSUPPORTED_SOURCE`, `PRIVATE_OR_BLOCKED_ADDRESS`, `SOURCE_UNAVAILABLE`, `SOURCE_TOO_LARGE`, `RATE_LIMITED`, `CAPTURE_UNAVAILABLE`, `AMBIGUOUS_ENTRYPOINT`, `INSPECTION_FAILED`, `GENERATION_FAILED`, `SANDBOX_FAILED`. Preserve HTTP semantics (400/403/404/413/429/422/502/503 as appropriate).
 
 Add request deduplication/cancellation, backpressure, resource ceilings and minimal safe progress logging. Validate any resulting file manifest and filesystem paths before writing to the sandbox. Never accept absolute paths, traversal or shell directives from generated content. Scope job/context data per user/session; do not reuse mutable process-global conversation state across users for the dashboard flow. Verify that current global state behavior does not cross-contaminate jobs before reusing it.
 
@@ -186,7 +186,7 @@ No publication or deployment credentials should be required to **inspect** or **
 
 ## 9. Delivery artifacts
 
-1. Implementation on a new branch created from \`website2code\` (proposed \`feature/dashboard2code\`) and a **draft PR back to \`website2code\`**.
+1. Implementation on a new branch created from `website2code` (proposed `feature/dashboard2code`) and a **draft PR back to `website2code`**.
 2. Updated README with three modes, example inputs, required optional env vars and source limitations.
 3. Unit/integration/browser tests and small public fixtures with license/attribution.
 4. API schema/examples, threat model, test report and short operator instructions.
